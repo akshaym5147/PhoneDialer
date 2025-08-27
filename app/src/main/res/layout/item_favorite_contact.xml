@@ -7,14 +7,6 @@
     android:gravity="center"
     android:padding="8dp">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/imageContact"-->
-<!--        android:layout_width="64dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:scaleType="centerCrop"-->
-<!--        android:src="@drawable/outline_account_circle_24"-->
-<!--        android:background="@drawable/circle_background"-->
-<!--        android:padding="4dp" />-->
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageContact"
@@ -28,11 +20,11 @@
         android:id="@+id/textContactName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Contact Name"
-        android:maxLines="2"
+        android:layout_marginTop="6dp"
         android:ellipsize="end"
         android:gravity="center"
-        android:layout_marginTop="4dp"
+        android:maxLines="2"
+        android:text="Contact Name"
         android:textSize="14sp" />
 
 </LinearLayout>

@@ -15,6 +15,25 @@ public class InitialsDrawable extends Drawable {
     private final Paint backgroundPaint;
     private final String initials;
 
+    private static final int[] CONTACT_COLORS = {
+            0xFFE57373, // Red 300
+            0xFFF06292, // Pink 300
+            0xFFBA68C8, // Purple 300
+            0xFF9575CD, // Deep Purple 300
+            0xFF7986CB, // Indigo 300
+            0xFF64B5F6, // Blue 300
+            0xFF4DD0E1, // Cyan 300
+            0xFF4DB6AC, // Teal 300
+            0xFF81C784, // Green 300
+            0xFFAED581, // Light Green 300
+            0xFFFFD54F, // Amber 300
+            0xFFFFB74D, // Orange 300
+            0xFFA1887F, // Brown 300
+            0xFF90A4AE, // Blue Grey 300
+            0xFFFF8A65  // Deep Orange 300
+    };
+
+
     public InitialsDrawable(String name) {
         // Take initials
         String[] parts = name.trim().split("\\s+");
@@ -23,7 +42,7 @@ public class InitialsDrawable extends Drawable {
         initials = (first + second).toUpperCase();
 
 
-        int bgColor = getRandomColor();
+        int bgColor = getRandomColor(initials);
 
         // Decide text color based on background (contrast check)
         int textColor = isColorDark(bgColor) ? Color.WHITE : Color.BLACK;
@@ -59,9 +78,10 @@ public class InitialsDrawable extends Drawable {
     @Override public void setColorFilter(ColorFilter colorFilter) { textPaint.setColorFilter(colorFilter); backgroundPaint.setColorFilter(colorFilter); }
     @Override public int getOpacity() { return PixelFormat.TRANSLUCENT; }
 
-    private int getRandomColor() {
-        Random random = new Random();
-        return Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+    private int getRandomColor(String contactName) {
+
+        int index = Math.abs(contactName.hashCode()) % CONTACT_COLORS.length;
+        return CONTACT_COLORS[index];
     }
 
     private boolean isColorDark(int color) {
