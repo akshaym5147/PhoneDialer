@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="8dp">
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageContact"-->
+<!--        android:layout_width="64dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:src="@drawable/outline_account_circle_24"-->
+<!--        android:background="@drawable/circle_background"-->
+<!--        android:padding="4dp" />-->
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageContact"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/CircleImageStyle" />
+
+
+    <TextView
+        android:id="@+id/textContactName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact Name"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp" />
+
+</LinearLayout>
