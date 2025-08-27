@@ -26,11 +26,11 @@
 
     <TextView
         android:id="@+id/textContactName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Contact Name"
+        android:maxLines="2"
         android:ellipsize="end"
-        android:singleLine="true"
         android:gravity="center"
         android:layout_marginTop="4dp"
         android:textSize="14sp" />

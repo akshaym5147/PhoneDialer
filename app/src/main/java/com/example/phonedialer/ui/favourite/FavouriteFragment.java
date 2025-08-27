@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,9 @@ import com.example.phonedialer.model.Contact;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
-public class FavouriteFragment extends Fragment {
+public class FavouriteFragment extends Fragment implements OnContactInteractionListener{
     private static final int REQUEST_CONTACTS_PERMISSION = 100;
 
     private FragmentFavouriteBinding binding;
@@ -37,47 +39,9 @@ public class FavouriteFragment extends Fragment {
     private RecyclerView recyclerView;
     int numberOfColumns = 3;
 
-    private List<Contact> contacts = Arrays.asList(
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-                    new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null),
-            new Contact("Akshay", "7083325829", null)
-    );
+    private TextToSpeech tts;
+
+    private List<Contact> contacts = new ArrayList<>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -88,13 +52,20 @@ public class FavouriteFragment extends Fragment {
         binding = FragmentFavouriteBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        tts = new TextToSpeech(getContext(), status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                tts.setLanguage(Locale.getDefault()); // Or Locale.ENGLISH, etc.
+            }
+        });
+
+
         recyclerView = binding.recyclerFavorites;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), numberOfColumns));
 
         int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(numberOfColumns, spacing, true));
 
-        adapter = new FavoritesAdapter(contacts, getContext());
+        adapter = new FavoritesAdapter(contacts, getContext(), this);
         recyclerView.setAdapter(adapter);
 
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS)
@@ -106,11 +77,6 @@ public class FavouriteFragment extends Fragment {
             loadStarredContacts();
         }
 
-//        loadStarredContacts();
-
-
-//        final TextView textView = binding.textHome;
-//        favouriteViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
@@ -194,6 +160,24 @@ public class FavouriteFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
         binding = null;
+    }
+
+    public void speakText(String text) {
+        if (tts != null) {
+            if (tts.isSpeaking()) {
+                tts.stop();
+            }
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+    }
+
+    @Override
+    public void onContactNameClickedForSpeech(String nameToSpeak) {
+        speakText(nameToSpeak);
     }
 }

@@ -36,10 +36,12 @@ import java.util.List;
 public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.FavoriteViewHolder> {
     private List<Contact> contacts;
     private final Context context;
+    private OnContactInteractionListener listener;
 
-    public FavoritesAdapter(List<Contact> contacts, Context context) {
+    public FavoritesAdapter(List<Contact> contacts, Context context, OnContactInteractionListener listener) {
         this.contacts = contacts;
         this.context = context;
+        this.listener = listener;
     }
 
     public void setContacts(List<Contact> newContacts) {
@@ -82,6 +84,13 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
                             new String[]{Manifest.permission.CALL_PHONE}, 200);
                 }
             }
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if(listener != null) {
+                listener.onContactNameClickedForSpeech(contact.getName());
+            }
+            return true;
         });
 
 
